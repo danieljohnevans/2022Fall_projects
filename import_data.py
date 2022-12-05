@@ -16,16 +16,12 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
     :return
     """
     ps = pathlib.Path(booknlp)
-
     allfiles = list(ps.glob('*/*/*.book'))
-
-    # print(allfiles)
     big_df = []
 
     for f in allfiles:
         t = open(f.as_posix())
         temp_json = json.load(t)
-        # print(temp_json)
         lhd_book = pd.concat([pd.DataFrame(temp_json),
                               pd.json_normalize(temp_json['characters'])],
                              axis=1)
@@ -39,7 +35,7 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
 
     # set index to id.
     # df_book.set_index('id', inplace=True)
-    #
+
     return df_book[['id', 'g.inference.he/him/his', 'g.inference.she/her',
                     'g.inference.they/them/their', 'g.inference.xe/xem/xyr/xir',
                     'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max']]
@@ -51,8 +47,12 @@ def read_metadata(metadata: str) -> pd.DataFrame:
     :param metadata:
     :return:
     """
+    ps = pathlib.Path(metadata)
+    temp_file = list(ps.glob('*.csv'))
 
-    pass
+    for md in temp_file:
+        metadata = pd.read_csv(md.as_posix())
+        return metadata
 
 
 def mutate_data(booknlp: pd.DataFrame, metadata: pd.DataFrame) -> pickle:
@@ -66,4 +66,5 @@ def mutate_data(booknlp: pd.DataFrame, metadata: pd.DataFrame) -> pickle:
 
 if __name__ == '__main__':
     read_booknlp('data/')
+    read_metadata('data/')
     pass
