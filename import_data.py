@@ -1,15 +1,14 @@
-import os
 import pathlib
 import pickle
 
 import pandas as pd
-import pandas as pickle
 import json
 
 """
 This file imports our bookNLP data and outputs it as a pickle. If available, it also connects metadata to our 
 HathiTrust IDs (HTIDs) 
 """
+
 
 def read_booknlp(booknlp: str) -> pd.DataFrame:
     """function to read in bookNLP data and return a dataframe of gender and related words
@@ -20,9 +19,8 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
 
     allfiles = list(ps.glob('*/*/*.book'))
 
-    files = [p for p in allfiles if p.is_file()]
-
     # print(allfiles)
+    big_df = []
 
     for f in allfiles:
         t = open(f.as_posix())
@@ -34,28 +32,37 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
 
         # drop characters column
         lhd_book = lhd_book.drop('characters', axis=1)
-        # lhd_book.set_index('id' , inplace=True)
+        big_df.append(lhd_book)
 
-        #do we want to return as single dataframe or multiple?
-        # return ldh_book
-        print(lhd_book)
+    # concat all into one large df
+    df_book = pd.concat(big_df, ignore_index=True)
+
+    # set index to id.
+    # df_book.set_index('id', inplace=True)
+    #
+    return df_book[['id', 'g.inference.he/him/his', 'g.inference.she/her',
+                    'g.inference.they/them/their', 'g.inference.xe/xem/xyr/xir',
+                    'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max']]
 
 
-def read_metadata(metadata:str) -> pd.DataFrame:
+def read_metadata(metadata: str) -> pd.DataFrame:
     """
     function to read in metadata and return it as a dataframe
     :param metadata:
     :return:
     """
+
     pass
 
-def mutate_data(booknlp:pd.DataFrame, metadata:pd.DataFrame) -> pickle:
+
+def mutate_data(booknlp: pd.DataFrame, metadata: pd.DataFrame) -> pickle:
     """
     function to combine booknlp and metadata and output pickle
     :param booknlp:
     :param metadata:
     :return:
     """
+
 
 if __name__ == '__main__':
     read_booknlp('data/')
