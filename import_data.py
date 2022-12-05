@@ -1,6 +1,5 @@
 import pathlib
 import pickle
-
 import pandas as pd
 import json
 
@@ -16,15 +15,24 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
     :return
     """
     ps = pathlib.Path(booknlp)
-    allfiles = list(ps.glob('*/*/*.book'))
+    allbooks = list(ps.glob('*/*/*.book'))
+    csv_temp = list(ps.glob('*.csv'))
     big_df = []
 
-    for f in allfiles:
+    #read in csv, since there is only one include it here
+    for md in csv_temp:
+        metadata = pd.read_csv(md.as_posix())
+    # return metadata
+
+    for f in allbooks:
         t = open(f.as_posix())
         temp_json = json.load(t)
         lhd_book = pd.concat([pd.DataFrame(temp_json),
                               pd.json_normalize(temp_json['characters'])],
                              axis=1)
+
+        # return filename as a new column
+        lhd_book['filename'] = f.name[:-5]
 
         # drop characters column
         lhd_book = lhd_book.drop('characters', axis=1)
@@ -36,23 +44,29 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
     # set index to id.
     # df_book.set_index('id', inplace=True)
 
-    return df_book[['id', 'g.inference.he/him/his', 'g.inference.she/her',
+    df_book = df_book[['id', 'g.inference.he/him/his', 'g.inference.she/her',
                     'g.inference.they/them/their', 'g.inference.xe/xem/xyr/xir',
-                    'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max']]
+                    'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max', 'filename']]
+
+    #finally mutate data
+    mutate_data(df_book, metadata)
 
 
-def read_metadata(metadata: str) -> pd.DataFrame:
+def read_char(booknlp: str) -> pd.DataFrame:
+    """function to read in character entity data and return a dataframe of names related words
+    :param booknlp
+    :return
     """
-    function to read in metadata and return it as a dataframe
-    :param metadata:
-    :return:
-    """
-    ps = pathlib.Path(metadata)
-    temp_file = list(ps.glob('*.csv'))
+    ps = pathlib.Path(booknlp)
+    allentities = list(ps.glob('*/*/*.entities'))
+    entities = []
+    for md in allentities:
+        entities.append(pd.read_csv(md.as_posix(), sep='\t'))
 
-    for md in temp_file:
-        metadata = pd.read_csv(md.as_posix())
-        return metadata
+    df_entities = pd.concat(entities, ignore_index=True)
+    df_entities.drop(['start_token', 'end_token'], axis=1, inplace=True)
+
+    return df_entities
 
 
 def mutate_data(booknlp: pd.DataFrame, metadata: pd.DataFrame) -> pickle:
@@ -63,8 +77,14 @@ def mutate_data(booknlp: pd.DataFrame, metadata: pd.DataFrame) -> pickle:
     :return:
     """
 
+    # merge name with id in
+    combined = pd.merge(metadata, booknlp, left_on='id', right_on='filename', how='inner')
+    combined.drop(['filename'], axis=1, inplace=True)
+
+    combined.to_pickle("./booknlp.pkl")
+
 
 if __name__ == '__main__':
-    read_booknlp('data/')
-    read_metadata('data/')
-    pass
+    file = 'data/'
+    read_booknlp(file)
+    read_char(file)
