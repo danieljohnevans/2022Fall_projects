@@ -40,7 +40,6 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
 
     # concat all into one large df
     df_book = pd.concat(big_df, ignore_index=True)
-
     # set index to id.
     # df_book.set_index('id', inplace=True)
 
@@ -48,9 +47,13 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
     # biggies = df_book[(df_book['filename'] == 'mdp.39015020750835') & (df_book['id'] == 411)]
     # print(biggies.iloc[0])
 
+    #only run if character is mentioned more than 50 times
+    df_book = df_book[df_book['count'] >= 50]
+
+    # save columns we want as dataframe
     df_book = df_book[['id', 'g.inference.he/him/his', 'g.inference.she/her',
-                    'g.inference.they/them/their', 'g.inference.xe/xem/xyr/xir',
-                    'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max', 'mentions.proper', 'filename']]
+                'g.inference.they/them/their', 'g.inference.xe/xem/xyr/xir',
+                'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max', 'mentions.proper', 'filename', 'count']]
 
     #finally mutate data
     mutate_data(df_book, metadata)
