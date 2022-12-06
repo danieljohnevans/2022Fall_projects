@@ -44,9 +44,13 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
     # set index to id.
     # df_book.set_index('id', inplace=True)
 
+    # need to establish a threshold for count. discuss w clara
+    # biggies = df_book[(df_book['filename'] == 'mdp.39015020750835') & (df_book['id'] == 411)]
+    # print(biggies.iloc[0])
+
     df_book = df_book[['id', 'g.inference.he/him/his', 'g.inference.she/her',
                     'g.inference.they/them/their', 'g.inference.xe/xem/xyr/xir',
-                    'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max', 'filename']]
+                    'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max', 'mentions.proper', 'filename']]
 
     #finally mutate data
     mutate_data(df_book, metadata)
@@ -76,10 +80,10 @@ def mutate_data(booknlp: pd.DataFrame, metadata: pd.DataFrame) -> pickle:
     :param metadata:
     :return:
     """
-
     # merge name with id in
-    combined = pd.merge(metadata, booknlp, left_on='id', right_on='filename', how='inner')
-    combined.drop(['filename'], axis=1, inplace=True)
+    combined = pd.merge(metadata, booknlp, left_on='id', right_on='filename', how='right')
+    combined.drop(['id_x'], axis=1, inplace=True)
+    # print(combined.iloc[0])
 
     combined.to_pickle("./booknlp.pkl")
 
