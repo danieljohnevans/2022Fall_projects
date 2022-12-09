@@ -9,7 +9,7 @@ HathiTrust IDs (HTIDs)
 """
 
 
-def read_booknlp(booknlp: str) -> pd.DataFrame:
+def read_booknlp(booknlp: str):
     """function to read in bookNLP data and return a dataframe of gender and related words
     :param booknlp
     :return
@@ -19,10 +19,9 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
     csv_temp = list(ps.glob('*.csv'))
     big_df = []
 
-    #read in csv, since there is only one include it here
+    # read in csv, since there is only one include it here
     for md in csv_temp:
         metadata = pd.read_csv(md.as_posix())
-    # return metadata
 
     for f in allbooks:
         t = open(f.as_posix())
@@ -40,22 +39,19 @@ def read_booknlp(booknlp: str) -> pd.DataFrame:
 
     # concat all into one large df
     df_book = pd.concat(big_df, ignore_index=True)
+
     # set index to id.
     # df_book.set_index('id', inplace=True)
 
-    # need to establish a threshold for count. discuss w clara
-    # biggies = df_book[(df_book['filename'] == 'mdp.39015020750835') & (df_book['id'] == 411)]
-    # print(biggies.iloc[0])
-
-    #only run if character is mentioned more than 50 times
+    # only run if character is mentioned more than 50 times
     df_book = df_book[df_book['count'] >= 50]
 
-    # save columns we want as dataframe
+    # save columns, we want as dataframe
     df_book = df_book[['id', 'g.inference.he/him/his', 'g.inference.she/her',
-                'g.inference.they/them/their', 'g.inference.xe/xem/xyr/xir',
-                'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max', 'mentions.proper', 'filename', 'count']]
+                       'g.inference.they/them/their', 'g.inference.xe/xem/xyr/xir',
+                       'g.inference.ze/zem/zir/hir', 'g.argmax', 'g.max', 'mentions.proper', 'filename', 'count']]
 
-    #finally mutate data
+    # finally mutate data
     mutate_data(df_book, metadata)
 
 
