@@ -10,9 +10,9 @@ HathiTrust IDs (HTIDs)
 
 
 def read_booknlp(booknlp: str):
-    """function to read in bookNLP data and return a dataframe of gender and related words
-    :param booknlp
-    :return
+    """function to read in bookNLP data and create a dataframe of gender and related words. Nothing is returned
+    because this function calls mutate_data(), which saves a pickled version of the data for future usage.
+    :param booknlp: a string representing a filepath to a data directory containing BookNLP output
     """
     ps = pathlib.Path(booknlp)
     allbooks = list(ps.glob('*/*/*.book'))
@@ -56,9 +56,11 @@ def read_booknlp(booknlp: str):
 
 
 def read_char(booknlp: str) -> pd.DataFrame:
-    """function to read in character entity data and return a dataframe of names related words
-    :param booknlp
-    :return
+    """function to read in character entity data and return a dataframe of name related words.
+    :param booknlp: a string representing a filepath to a data directory containing BookNLP output
+    :return: DataFrame of entities for each book
+    >>> path_str = 'data/dan_booknlp'
+    >>> read_char(path_str)
     """
     ps = pathlib.Path(booknlp)
     allentities = list(ps.glob('*/*/*.entities'))
