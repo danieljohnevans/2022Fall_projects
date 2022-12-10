@@ -37,9 +37,27 @@ For example, this is the table produced for the book _The Left Hand of Darkness_
 ![img.png](images/lhd_char_table.png)
 
 ## Analysis
+ * to-do: 
+   * insert graphs for relationship between author gender and character gender
+   * insert graphs for character gender proportions
+   * insert graphs for general character counts
 
 ## Conclusion and Next Steps
+We can see the value in rerunning this pipeline through our selected case studies, given that characters are using non-binary
+pronouns in this corpus and that BookNLP is generally accurate in its gender classifications, even when characters have
+ambiguous names or names that may not appear in the U.S. Census data, which is an improvement over previous limitations.
 
+There are still limitations in this project as well, however. For example, there are sources of noise that should likely
+be removed. Non-gendered pronouns, like "I" or "you," are currently split evenly across all pronoun categories. Overall, 
+this does not seem to effect the general accuracy of the predictions, but it does mean a story told in the 2nd person may
+have less confident predictions.
+
+In addition, this was a case study. As such, we need to greatly expand the corpus of books. This will give us much more
+data and allow for proper statistical testing of our hypotheses. The current data also stops at 1999, meaning more recent
+evolutions in writing about gender are not being captured. We hypothesize that we will see an increased use of non-binary
+characters post-2000 and would very much like to include these works.
+
+We are fairly confident that this pipeline is generalized and usable, but that remains to be tested once we receive more data.
 
 ## References
 
