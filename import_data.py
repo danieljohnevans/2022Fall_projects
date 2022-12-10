@@ -59,8 +59,10 @@ def read_char(booknlp: str) -> pd.DataFrame:
     """function to read in character entity data and return a dataframe of name related words.
     :param booknlp: a string representing a filepath to a data directory containing BookNLP output
     :return: DataFrame of entities for each book
-    >>> path_str = 'data/dan_booknlp'
-    >>> read_char(path_str)
+    >>> path_str = 'data'
+    >>> test_char = read_char(path_str)
+    >>> test_char.columns
+    Index(['COREF', 'prop', 'cat', 'text'], dtype='object')
     """
     ps = pathlib.Path(booknlp)
     allentities = list(ps.glob('*/*/*.entities'))
