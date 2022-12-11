@@ -37,13 +37,25 @@ For example, this is the table produced for the book _The Left Hand of Darkness_
 ![img.png](images/lhd_char_table.png)
 
 ## Analysis
- * to-do: 
-   * insert graphs for relationship between author gender and character gender
-   * insert graphs for character gender proportions
-   * insert graphs for general character counts
+Our analysis reminds us of the complexities of gender. These complexities cannot be fully categorized, drawn out, or embodied through a probabilistic analysis of pronoun usage. Our case studies highlight a few notable instances in which BookNLP fails to identify and recognize gender-fluid and non-binary characters. While our hand-coded data is too sparse to draw meaningful statistical conclusions, we are hopeful that this project and code will serve as a springboard for further downstream analysis.
+
+Furthermore, we note that speculative fiction is a useful sounding board for analyzing non-binary and gender-fluid characters, however, BookNLP's reliance on pronouns makes programmatically identifying those characters difficult.
+
+Across our corpus, our characters can be counted as such:
+
+![img.png](images/total_char_by_year.png)
+
+We further segment our data by author and character gender:
+
+![img.png](images/char_female.png)
+
+![img.png](images/char_male.png)
+
+![img.png](images/char_trans.png)
+
 
 ## Conclusion and Next Steps
-We can see the value in rerunning this pipeline through our selected case studies, given that characters are using non-binary
+We can see the value in re-running this pipeline through our selected case studies, given that characters are using non-binary
 pronouns in this corpus and that BookNLP is generally accurate in its gender classifications, even when characters have
 ambiguous names or names that may not appear in the U.S. Census data, which is an improvement over previous limitations.
 
