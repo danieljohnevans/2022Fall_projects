@@ -2,13 +2,6 @@ import numpy as np
 import pandas as pd
 
 
-def read_books(books: str):
-    """function to read in book metadata
-    :param books
-    """
-    pass
-
-
 def combine_book_and_entity(entities_df: pd.DataFrame, book_df: pd.DataFrame) -> pd.DataFrame:
     """
     Given the two dataframes of interest, combine characters with book info to match gender inferences to characters.
@@ -62,21 +55,6 @@ def get_character_refs(chars: list, entities_df: pd.DataFrame) -> pd.DataFrame:
     # return a dataframe with only the COREF values we stored earlier
     return entities_df[entities_df['COREF'].isin(chars_of_interest)]
 
-
-def count_words(gender: pd.DataFrame):
-    """function to count most frequent words identified per gender
-        :param gender
-
-    """
-    pass
-
-
-def make_gender_graphs(chars: pd.DataFrame):
-    """
-    function to take a processed character dataframe and make a bar graph of gender inferences
-    :param chars:
-    """
-    pass
 
 
 if __name__ == '__main__':
