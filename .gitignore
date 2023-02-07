@@ -134,3 +134,4 @@ dmypy.json
 
 __MACOSX/
 .DS_Store
+data/dan_booknlp/
